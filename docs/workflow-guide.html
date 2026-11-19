@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng Đời Phần Mềm Thời AI (Dual-Loop AI-Native SDLC)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            dark: {
+              950: '#06080d',
+              900: '#0b0f19',
+              850: '#101524',
+              800: '#171f34',
+              700: '#232f4e',
+            },
+            brand: {
+              500: '#6366f1',
+              600: '#4f46e5',
+              400: '#818cf8',
+              cyan: '#06b6d4',
+              emerald: '#10b981',
+              amber: '#f59e0b',
+              rose: '#f43f5e',
+              purple: '#a855f7',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0f19; }
+    ::-webkit-scrollbar-thumb { background: #232f4e; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+    .glass-card { background: rgba(16, 21, 36, 0.78); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-card:hover { border-color: rgba(99, 102, 241, 0.45); }
+    .phase-badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 600; }
+    .loop-card { position: relative; border-radius: 1rem; padding: 1.25rem; transition: all 0.2s ease; cursor: pointer; }
+    .loop-card:hover { transform: translateY(-3px); }
+  </style>
+</head>
+<body class="bg-dark-950 text-slate-200 font-sans min-h-screen antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800/80 sticky top-0 z-40 bg-dark-900/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-cyan to-brand-400 flex items-center justify-center font-bold text-white text-lg shadow-lg shadow-brand-500/20">
+          ⚡
+        </div>
+        <div>
+          <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">
+            Dual-Loop AI SDLC
+          </span>
+          <span class="text-xs ml-2 px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20 font-medium">
+            Mô Hình Hai Vòng Lặp
+          </span>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button onclick="switchTab('dualloop')" id="tab-btn-dualloop" class="nav-tab px-3 py-1.5 rounded-lg text-sm font-medium transition text-brand-400 bg-brand-500/10 border border-brand-500/30">
+          Sơ Đồ Hai Vòng Lặp
+        </button>
+        <button onclick="switchTab('evolution')" id="tab-btn-evolution" class="nav-tab px-3 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition">
+          So Sánh: Cũ vs Mới
+        </button>
+        <button onclick="switchTab('mcptools')" id="tab-btn-mcptools" class="nav-tab px-3 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition">
+          Hệ Sinh Thái MCP
+        </button>
+        <button onclick="switchTab('generator')" id="tab-btn-generator" class="nav-tab px-3.5 py-1.5 rounded-lg text-sm font-medium bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md shadow-brand-500/25 hover:opacity-95 transition">
+          Tạo Prompt Sprint
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Header -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
+    <div class="relative overflow-hidden rounded-2xl p-6 sm:p-8 border border-slate-800 bg-gradient-to-r from-dark-900 via-dark-850 to-dark-900">
+      <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-brand-cyan/10 blur-3xl pointer-events-none"></div>
+      <div class="relative z-10">
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-dark-950 border border-slate-700/60 text-xs font-mono text-cyan-400 mb-3">
+          <span>Kiến Trúc Chuẩn:</span>
+          <span class="text-slate-300">Foundation (1 Lần) ➔ Continuous Inner Sprint Loop ➔ Outer Feedback Loop</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+          Vòng Đời Phần Mềm Thời AI: Cấu Trúc Khởi Tạo, Vòng Lặp Sprint & Vận Hành
+        </h1>
+        <p class="mt-2 text-sm sm:text-base text-slate-400 max-w-4xl leading-relaxed">
+          Quy trình phát triển phần mềm hiện đại không phải là một đường thẳng (waterfall). Nó gồm: 
+          <strong class="text-cyan-400">Giai đoạn Khởi tạo Nền tảng (Foundation)</strong> làm 1 lần ở đầu dự án, 
+          <strong class="text-emerald-400">Vòng lặp Sprint liên tục ở giữa (Inner Loop)</strong> lặp lại cho từng tính năng (Specify ➔ Plan ➔ Prototype ➔ TDD Build ➔ Review ➔ Converge), 
+          và <strong class="text-purple-400">Vòng lặp Vận hành & Phản hồi (Outer Loop)</strong> nạp lỗi người dùng ngược lại vào evals của sprint tiếp theo.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: SƠ ĐỒ HAI VÒNG LẶP (DUAL-LOOP ARCHITECTURE) -->
+  <main id="section-dualloop" class="tab-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="mb-6 flex items-center justify-between">
+      <div>
+        <h2 class="text-xl font-bold text-white flex items-center">
+          <span class="w-2.5 h-2.5 rounded-full bg-brand-cyan inline-block mr-2.5 animate-pulse"></span>
+          Bản Đồ Kiến Trúc Dual-Loop (3 Phân Tầng Thời Gian)
+        </h2>
+        <p class="text-xs text-slate-400 mt-0.5">Nhấp vào từng khối để xem tài liệu cần viết, kỹ năng áp dụng và công cụ MCP.</p>
+      </div>
+      <span class="text-xs text-slate-500 bg-dark-850 border border-slate-800 px-3 py-1 rounded-full font-mono">
+        Nhấp bất kỳ thẻ nào để mở chi tiết
+      </span>
+    </div>
+
+    <!-- TIER 1: PROJECT FOUNDATION (LÀM 1 LẦN) -->
+    <div class="mb-8">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="w-6 h-6 rounded-md bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs font-bold font-mono">01</span>
+        <h3 class="text-base font-bold text-white">GIAI ĐOẠN KHỞI TẠO NỀN TẢNG (PROJECT FOUNDATION — Làm 1 Lần Ở Đầu Dự Án)</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        <div onclick="openDrawer('fn_constitution')" class="loop-card glass-card border-t-2 border-t-cyan-400">
+          <span class="phase-badge bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">FOUNDATION</span>
+          <h4 class="text-sm font-bold text-white mt-2">Hiến Pháp Dự Án</h4>
+          <p class="text-xs text-slate-400 mt-1">Xác lập các nguyên tắc bất biến: Test-First, Library-First, Zero-Trust.</p>
+          <div class="mt-3 text-[11px] font-mono text-cyan-400">spec/.specify/constitution.md</div>
+        </div>
+
+        <div onclick="openDrawer('fn_harness')" class="loop-card glass-card border-t-2 border-t-cyan-400">
+          <span class="phase-badge bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">FOUNDATION</span>
+          <h4 class="text-sm font-bold text-white mt-2">Harness & Agent Rules</h4>
+          <p class="text-xs text-slate-400 mt-1">Khóa dây cương cho Agent: Lệnh chạy test, vị trí lưu plan, cấm sửa file nhạy cảm.</p>
+          <div class="mt-3 text-[11px] font-mono text-cyan-400">AGENTS.md / CLAUDE.md</div>
+        </div>
+
+        <div onclick="openDrawer('fn_glossary')" class="loop-card glass-card border-t-2 border-t-cyan-400">
+          <span class="phase-badge bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">FOUNDATION</span>
+          <h4 class="text-sm font-bold text-white mt-2">Từ Điển Nghiệp Vụ</h4>
+          <p class="text-xs text-slate-400 mt-1">Khóa cứng danh từ/động từ miền nghiệp vụ, chống việc AI đặt tên hỗn loạn.</p>
+          <div class="mt-3 text-[11px] font-mono text-cyan-400">GLOSSARY.md</div>
+        </div>
+
+        <div onclick="openDrawer('fn_system')" class="loop-card glass-card border-t-2 border-t-cyan-400">
+          <span class="phase-badge bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">FOUNDATION</span>
+          <h4 class="text-sm font-bold text-white mt-2">C4 Context & Tokens</h4>
+          <p class="text-xs text-slate-400 mt-1">Sơ đồ C4 Level 1-2 toàn cục và hệ thống Design Tokens CSS Variables.</p>
+          <div class="mt-3 text-[11px] font-mono text-cyan-400">system-context.md, tokens.css</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TIER 2: THE INNER SPRINT LOOP (VÒNG LẶP LIÊN TỤC THEO FEATURE) -->
+    <div class="mb-8 p-6 rounded-2xl bg-dark-900/90 border border-emerald-500/30 relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none"></div>
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold font-mono">02</span>
+          <div>
+            <h3 class="text-base font-bold text-white">VÒNG LẶP SPRINT LIÊN TỤC (THE INNER SPRINT LOOP — Lặp Theo Từng Tính Năng / User Story)</h3>
+            <p class="text-xs text-slate-400">Lặp đi lặp lại 6 bước này liên tục trong suốt sprint cho từng feature cho tới khi hoàn thành toàn bộ backlog.</p>
+          </div>
+        </div>
+        <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 animate-pulse">
+          🔄 Vòng lặp liên tục
+        </span>
+      </div>
+
+      <!-- 6 Steps Loop Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
+
+        <!-- Loop Step 1 -->
+        <div onclick="openDrawer('loop_specify')" class="loop-card bg-dark-950/80 border border-slate-800 hover:border-emerald-500/50">
+          <div class="text-[10px] font-mono text-emerald-400 font-bold mb-1">BƯỚC 1</div>
+          <h5 class="text-xs font-bold text-white">Elicit & Specify</h5>
+          <p class="text-[11px] text-slate-400 mt-1">AI phỏng vấn ngược, khóa Non-goals, lập Scenarios Given-When-Then.</p>
+          <div class="mt-2 text-[10px] font-mono text-slate-500">spec.md, contracts.ts</div>
+        </div>
+
+        <!-- Loop Step 2 -->
+        <div onclick="openDrawer('loop_plan')" class="loop-card bg-dark-950/80 border border-slate-800 hover:border-emerald-500/50">
+          <div class="text-[10px] font-mono text-emerald-400 font-bold mb-1">BƯỚC 2</div>
+          <h5 class="text-xs font-bold text-white">Plan & Decompose</h5>
+          <p class="text-[11px] text-slate-400 mt-1">Bóc tách tasks lát cắt dọc, ghi nhận ADR, grilling chất vấn điểm mù.</p>
+          <div class="mt-2 text-[10px] font-mono text-slate-500">plan.md, tasks.md, ADR</div>
+        </div>
+
+        <!-- Loop Step 3 -->
+        <div onclick="openDrawer('loop_prototype')" class="loop-card bg-dark-950/80 border border-slate-800 hover:border-emerald-500/50">
+          <div class="text-[10px] font-mono text-emerald-400 font-bold mb-1">BƯỚC 3</div>
+          <h5 class="text-xs font-bold text-white">Prototype & Evals</h5>
+          <p class="text-[11px] text-slate-400 mt-1">Đo đạc TTFT, token cost, chuẩn bị 10-20 test cases vàng kiểm chứng AI.</p>
+          <div class="mt-2 text-[10px] font-mono text-slate-500">evals.json, prototype/</div>
+        </div>
+
+        <!-- Loop Step 4 -->
+        <div onclick="openDrawer('loop_build')" class="loop-card bg-dark-950/80 border border-slate-800 hover:border-emerald-500/50">
+          <div class="text-[10px] font-mono text-emerald-400 font-bold mb-1">BƯỚC 4</div>
+          <h5 class="text-xs font-bold text-white">TDD Build Loop</h5>
+          <p class="text-[11px] text-slate-400 mt-1">Red ➔ Green tại Public Seams, giấu LLM sau Adapter để test tất định.</p>
+          <div class="mt-2 text-[10px] font-mono text-slate-500">tests/*.spec.ts, src/core/</div>
+        </div>
+
+        <!-- Loop Step 5 -->
+        <div onclick="openDrawer('loop_review')" class="loop-card bg-dark-950/80 border border-slate-800 hover:border-emerald-500/50">
+          <div class="text-[10px] font-mono text-emerald-400 font-bold mb-1">BƯỚC 5</div>
+          <h5 class="text-xs font-bold text-white">2-Axis Review</h5>
+          <p class="text-[11px] text-slate-400 mt-1">2 sub-agent song song: Trục 1 quét Fowler Smells; Trục 2 so khớp spec.md.</p>
+          <div class="mt-2 text-[10px] font-mono text-slate-500">git diff review, OWASP</div>
+        </div>
+
+        <!-- Loop Step 6 -->
+        <div onclick="openDrawer('loop_converge')" class="loop-card bg-dark-950/80 border border-slate-800 hover:border-emerald-500/50">
+          <div class="text-[10px] font-mono text-emerald-400 font-bold mb-1">BƯỚC 6</div>
+          <h5 class="text-xs font-bold text-white">Converge & Loop</h5>
+          <p class="text-[11px] text-slate-400 mt-1">Kiểm tra hội tụ (speckit-converge). Chưa hết task: Lặp lại. Xong: Chuyển Release.</p>
+          <div class="mt-2 text-[10px] font-mono text-slate-500">speckit-converge</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TIER 3: THE OUTER RELEASE & FEEDBACK LOOP -->
+    <div>
+      <div class="flex items-center gap-2 mb-3">
+        <span class="w-6 h-6 rounded-md bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold font-mono">03</span>
+        <h3 class="text-base font-bold text-white">PHÁT HÀNH, VẬN HÀNH & PHẢN HỒI (OUTER RELEASE & FEEDBACK LOOP)</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        <div onclick="openDrawer('rel_ephemeral')" class="loop-card glass-card border-t-2 border-t-purple-400">
+          <span class="phase-badge bg-purple-500/10 text-purple-400 border border-purple-500/20">RELEASE</span>
+          <h4 class="text-sm font-bold text-white mt-2">Database Branching PR</h4>
+          <p class="text-xs text-slate-400 mt-1">Mỗi PR clone 1 nhánh DB riêng (Neon) để test tự động trong 1 giây rồi xóa.</p>
+          <div class="mt-3 text-[11px] font-mono text-purple-400">Neon Postgres Branching</div>
+        </div>
+
+        <div onclick="openDrawer('rel_contract_ci')" class="loop-card glass-card border-t-2 border-t-purple-400">
+          <span class="phase-badge bg-purple-500/10 text-purple-400 border border-purple-500/20">RELEASE</span>
+          <h4 class="text-sm font-bold text-white mt-2">Postman Contract CI</h4>
+          <p class="text-xs text-slate-400 mt-1">GitHub Actions chạy Postman CLI chặn 100% các breaking API changes.</p>
+          <div class="mt-3 text-[11px] font-mono text-purple-400">.github/workflows/deploy.yml</div>
+        </div>
+
+        <div onclick="openDrawer('rel_llmops')" class="loop-card glass-card border-t-2 border-t-purple-400">
+          <span class="phase-badge bg-purple-500/10 text-purple-400 border border-purple-500/20">OPERATIONS</span>
+          <h4 class="text-sm font-bold text-white mt-2">LLMOps Tracing & APM</h4>
+          <p class="text-xs text-slate-400 mt-1">Langfuse theo dõi chi phí token ($), độ trễ TTFT và tỷ lệ ảo giác real-time.</p>
+          <div class="mt-3 text-[11px] font-mono text-purple-400">Langfuse + Sentry + PostHog</div>
+        </div>
+
+        <div onclick="openDrawer('rel_feedback')" class="loop-card glass-card border-t-2 border-t-purple-400">
+          <span class="phase-badge bg-purple-500/10 text-purple-400 border border-purple-500/20">FEEDBACK</span>
+          <h4 class="text-sm font-bold text-white mt-2">Vòng Lặp Phản Hồi Evals</h4>
+          <p class="text-xs text-slate-400 mt-1">Câu trả lời bị user Dislike tự động nạp ngược về evals.json cho sprint sau.</p>
+          <div class="mt-3 text-[11px] font-mono text-purple-400">🔄 Loop back to Sprint Evals</div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 2: SO SÁNH CŨ VS MỚI -->
+  <main id="section-evolution" class="tab-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 hidden">
+    <div class="mb-6">
+      <h2 class="text-xl font-bold text-white">Bảng So Sánh Toàn Diện: Thời Chưa Có AI vs Thời Đại AI</h2>
+      <p class="text-xs text-slate-400 mt-1">Sự khác biệt căn bản giữa hai kỷ nguyên trong từng công đoạn thực hiện.</p>
+    </div>
+
+    <div class="space-y-4">
+      <!-- 1 -->
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-cyan-400">
+        <h4 class="text-sm font-bold text-white mb-2">1. Khởi Tạo Dự Án & Thiết Lập Quy Chuẩn</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-slate-800">
+            <span class="text-rose-400 font-bold block mb-1">❌ Thời Chưa Có AI</span>
+            <p class="text-slate-400 leading-relaxed">Cài đặt thủ công, viết wiki tản mác trên Notion/Confluence, mỗi lập trình viên đặt tên biến một kiểu.</p>
+          </div>
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-cyan-500/30 bg-cyan-950/10">
+            <span class="text-cyan-400 font-bold block mb-1">⚡ Kỷ Nguyên AI (Harness 1 Lần)</span>
+            <p class="text-slate-300 leading-relaxed">Khóa cứng Hiến pháp (<code>constitution.md</code>), Quy tắc Agent (<code>AGENTS.md</code>), và Từ điển danh từ/động từ (<code>GLOSSARY.md</code>) để trói buộc hành vi của AI.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-amber-400">
+        <h4 class="text-sm font-bold text-white mb-2">2. Yêu Cầu, Luồng & Phân Vai (Actors & Swimlanes)</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-slate-800">
+            <span class="text-rose-400 font-bold block mb-1">❌ Thời Chưa Có AI</span>
+            <p class="text-slate-400 leading-relaxed">BA viết SRS dày cộp 50 trang; vẽ sơ đồ Swimlane bằng Visio/Draw.io mất 3-4 tuần. Khách hàng nhìn sơ đồ tĩnh trên giấy thì duyệt nhưng đến khi thấy app thật lại không ưng.</p>
+          </div>
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-amber-500/30 bg-amber-950/10">
+            <span class="text-amber-400 font-bold block mb-1">⚡ Kỷ Nguyên AI (Conversational Spec & Prototyping)</span>
+            <p class="text-slate-300 leading-relaxed">AI phỏng vấn ngược lại lập trình viên để bóc tách edge cases. Tự động sinh sơ đồ Swimlane Mermaid. Dựng Clickable Prototype chạy thật sau 15 phút để khách bấm thử và chốt spec ngay ngày đầu.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-purple-400">
+        <h4 class="text-sm font-bold text-white mb-2">3. Thiết Kế UI/UX & Giao Diện</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-slate-800">
+            <span class="text-rose-400 font-bold block mb-1">❌ Thời Chưa Có AI</span>
+            <p class="text-slate-400 leading-relaxed">Vẽ wireframe lo-fi $\rightarrow$ vẽ Figma hi-fi 3-4 tuần. Hand-off cho Dev cắt HTML/CSS bị lệch pixel, thiếu các trạng thái loading, skeleton, error.</p>
+          </div>
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-purple-500/30 bg-purple-950/10">
+            <span class="text-purple-400 font-bold block mb-1">⚡ Kỷ Nguyên AI (Prompt-to-Working-UI & Tokens)</span>
+            <p class="text-slate-300 leading-relaxed">Dùng Generative UI sinh thẳng React + Tailwind chạy thật. Khóa bộ biến CSS <code>tokens.css</code>. Thiết kế sẵn Streaming UI (Server-Sent Events) cho phản hồi của AI.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-emerald-400">
+        <h4 class="text-sm font-bold text-white mb-2">4. Thiết Kế Dữ Liệu & API Backend</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-slate-800">
+            <span class="text-rose-400 font-bold block mb-1">❌ Thời Chưa Có AI</span>
+            <p class="text-slate-400 leading-relaxed">Vẽ ERD trên giấy, viết SQL table thủ công. Frontend phải ngồi chờ Backend code xong API thật mới có dữ liệu để ghép nối.</p>
+          </div>
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-emerald-500/30 bg-emerald-950/10">
+            <span class="text-emerald-400 font-bold block mb-1">⚡ Kỷ Nguyên AI (Contract-First & Instant Mocking)</span>
+            <p class="text-slate-300 leading-relaxed">Khóa cứng kiểu dữ liệu tĩnh trong <code>contracts.ts</code>. Dùng Postman MCP tạo ngay Mock Server API giả lập. Frontend và Backend làm việc song song 100% ngay từ ngày đầu.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-rose-400">
+        <h4 class="text-sm font-bold text-white mb-2">5. Hiện Thực Hóa Mã Nguồn & Vòng Lặp Lập Trình</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-slate-800">
+            <span class="text-rose-400 font-bold block mb-1">❌ Thời Chưa Có AI</span>
+            <p class="text-slate-400 leading-relaxed">Dev ngồi gõ từng dòng lệnh, tốn 80% thời gian sửa lỗi cú pháp. Code hết toàn bộ backend rồi mới chuyển sang code frontend.</p>
+          </div>
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-rose-500/30 bg-rose-950/10">
+            <span class="text-rose-400 font-bold block mb-1">⚡ Kỷ Nguyên AI (Conductor & Vertical Slice TDD)</span>
+            <p class="text-slate-300 leading-relaxed">Con người chỉ huy (Conductor): AI viết test Red $\rightarrow$ AI sinh code pass Green tại Public Seams. Phát triển theo từng lát cắt dọc hoàn chỉnh từ UI đến DB.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-indigo-400">
+        <h4 class="text-sm font-bold text-white mb-2">6. Kiểm Thử, Thẩm Định & Vận Hành</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-slate-800">
+            <span class="text-rose-400 font-bold block mb-1">❌ Thời Chưa Có AI</span>
+            <p class="text-slate-400 leading-relaxed">Test tay bằng Excel; senior soi lỗi bằng mắt; server staging cố định tốn kém; sợ sập DB khi migrate; không có cách kiểm soát ảo giác của AI.</p>
+          </div>
+          <div class="p-3 rounded-lg bg-dark-950/70 border border-indigo-500/30 bg-indigo-950/10">
+            <span class="text-indigo-400 font-bold block mb-1">⚡ Kỷ Nguyên AI (Two-Axis Review, DB Branching & LLMOps)</span>
+            <p class="text-slate-300 leading-relaxed">2 sub-agent review độc lập (Standards vs Spec). Test bằng Golden Evals. Database Branching per PR (Neon). Langfuse đo token cost và nạp câu trả lời lỗi ngược về evals cho sprint sau.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 3: HỆ SINH THÁI MCP TOOLS -->
+  <main id="section-mcptools" class="tab-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 hidden">
+    <div class="mb-6">
+      <h2 class="text-xl font-bold text-white">Bộ Công Cụ & MCP Servers Cho Toàn Bộ Vòng Đời</h2>
+      <p class="text-xs text-slate-400 mt-1">Harness Engineering: Mô hình chỉ chiếm 10%, 90% sức mạnh nằm ở bộ công cụ và các chốt chặn.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-orange-400">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-bold text-white text-sm">Postman Plugin / MCP</h3>
+          <span class="text-[10px] font-mono text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded">Mocking & Contracts</span>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Tạo Mock Server API tức thì cho Frontend chạy độc lập. Tự động kiểm thử API contract trong CI runner để chặn breaking changes.
+        </p>
+      </div>
+
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-rose-400">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-bold text-white text-sm">Firecrawl MCP</h3>
+          <span class="text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded">Grounding Specs</span>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Đào sâu tài liệu kỹ thuật gốc, RFC, API của đối thủ cạnh tranh để cung cấp dữ liệu grounding cho file đặc tả spec.md.
+        </p>
+      </div>
+
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-cyan-400">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-bold text-white text-sm">GitNexus MCP</h3>
+          <span class="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">Code Graph & Impact</span>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Phân tích đồ thị phụ thuộc (Call Graph, Data Flow, PDG). Giúp AI biết chính xác sửa một hàm sẽ làm ảnh hưởng những module nào.
+        </p>
+      </div>
+
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-emerald-400">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-bold text-white text-sm">Neon Postgres MCP</h3>
+          <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Ephemeral Branching</span>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Nhân bản Database tức thì cho mỗi nhánh PR trong 1 giây để chạy test tự động. Cung cấp Vector Search tích hợp sẵn (pgvector).
+        </p>
+      </div>
+
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-purple-400">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-bold text-white text-sm">pstack Role Router</h3>
+          <span class="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">Cost & Model Lever</span>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Định tuyến mô hình: Việc khó và review dùng <code>claude-opus-5-thinking-high</code>; việc sinh code nhanh dùng <code>cursor-grok-4.6-high-fast</code>.
+        </p>
+      </div>
+
+      <div class="glass-card rounded-xl p-5 border-l-4 border-l-blue-400">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-bold text-white text-sm">Context7 MCP</h3>
+          <span class="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">Real-time Docs</span>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Tra cứu cú pháp API chuẩn xác của Next.js 15, React 19, Tailwind mới nhất, ngăn chặn hoàn toàn việc AI dùng cú pháp cũ đã bị deprecate.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 4: GENERATOR -->
+  <main id="section-generator" class="tab-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 hidden">
+    <div class="glass-card rounded-2xl p-6 sm:p-8 max-w-4xl mx-auto">
+      <h2 class="text-xl font-bold text-white">Trình Tạo Prompt Chuẩn Cho Vòng Lặp Sprint AI-Native</h2>
+      <p class="text-xs text-slate-400 mt-1">
+        Tự động tạo prompt chuẩn xác điều phối AI thực hiện vòng lặp Sprint (Specify ➔ Plan ➔ Prototype ➔ TDD Build ➔ Review ➔ Converge).
+      </p>
+
+      <div class="mt-6 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Tên Tính Năng / User Story Của Sprint Này</label>
+          <input id="input-feat" type="text" value="Phân Quyền Bác Sĩ & Dashboard Báo Cáo Sự Cố Thuốc (Clinician Portal & Incident Reporting)" class="w-full bg-dark-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-500 font-mono">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Công Nghệ & AI Engine</label>
+          <input id="input-ai" type="text" value="React 19 + Next.js App Router + Neon Postgres + Qdrant Vector + Grok/Claude Router" class="w-full bg-dark-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-500 font-mono">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Non-Goals (Những gì tuyệt đối KHÔNG làm ở sprint này)</label>
+          <input id="input-nongoals" type="text" value="Chưa làm tính năng xuất hóa đơn PDF, chưa tích hợp gửi SMS thông báo" class="w-full bg-dark-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-500 font-mono">
+        </div>
+
+        <button onclick="generatePrompt()" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold text-sm transition shadow-lg shadow-brand-500/20">
+          Tạo Prompt Khởi Chạy Sprint
+        </button>
+
+        <div class="mt-6">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-slate-400">Prompt Đã Tạo (Sao chép và đưa vào Cursor Agent Mode):</span>
+            <button onclick="copyGeneratedPrompt()" id="copy-btn" class="text-xs text-brand-400 hover:text-white transition px-2 py-1 bg-brand-500/10 rounded border border-brand-500/20">
+              Sao chép vào Clipboard
+            </button>
+          </div>
+          <textarea id="output-prompt" readonly rows="14" class="w-full bg-dark-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-300 font-mono focus:outline-none leading-relaxed"></textarea>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DRAWER FOR GRANULAR DETAILS -->
+  <div id="drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+    <div onclick="closeDrawer()" class="absolute inset-0 bg-dark-950/80 backdrop-blur-sm transition-opacity"></div>
+    <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+      <div class="w-screen max-w-2xl bg-dark-900 border-l border-slate-800 p-6 sm:p-8 overflow-y-auto flex flex-col justify-between shadow-2xl">
+        <div>
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div>
+              <span id="drawer-badge" class="phase-badge bg-brand-500/10 text-brand-400 border border-brand-500/20">
+                PHASE DETAIL
+              </span>
+              <h2 id="drawer-title" class="text-xl font-bold text-white mt-1.5">Tiêu đề</h2>
+            </div>
+            <button onclick="closeDrawer()" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-dark-800 transition">✕</button>
+          </div>
+          <div id="drawer-content" class="mt-6 space-y-6 text-sm text-slate-300">
+            <!-- Dynamic Content -->
+          </div>
+        </div>
+        <div class="pt-6 border-t border-slate-800 mt-8 flex justify-end">
+          <button onclick="closeDrawer()" class="px-4 py-2 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-200 text-xs font-semibold transition">
+            Đóng bảng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('text-brand-400', 'bg-brand-500/10', 'border', 'border-brand-500/30');
+        el.classList.add('text-slate-400');
+      });
+
+      const activeContent = document.getElementById('section-' + tabId);
+      const activeBtn = document.getElementById('tab-btn-' + tabId);
+      if (activeContent) activeContent.classList.remove('hidden');
+      if (activeBtn && tabId !== 'generator') {
+        activeBtn.classList.remove('text-slate-400');
+        activeBtn.classList.add('text-brand-400', 'bg-brand-500/10', 'border', 'border-brand-500/30');
+      }
+    }
+
+    const drawerDetails = {
+      // FOUNDATION
+      fn_constitution: {
+        badge: "FOUNDATION • BẮT BUỘC 01",
+        title: "Hiến Pháp Dự Án (spec/.specify/memory/constitution.md)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li>Xác lập 4 nguyên tắc bất biến của dự án: <strong>Test-First</strong> (bắt buộc viết test trước khi code), <strong>Library-First</strong> (đóng gói module độc lập), <strong>CLI/Interface Protocol</strong>, và <strong>Zero-Trust AI Output</strong>.</li>
+              <li>Chặn đứng nguy cơ Agent tự sáng tác kiến trúc không kiểm soát.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400 mt-3">2. Phân Công & Tệp Tin</h4>
+            <p class="text-xs text-slate-400 mt-1">
+              <strong>Người làm:</strong> Định hình nguyên tắc cốt lõi.<br>
+              <strong>AI làm:</strong> Dùng skill <code>speckit-constitution</code> sinh và chuẩn hóa markdown.<br>
+              <strong>Tệp sinh ra:</strong> <code>spec/.specify/memory/constitution.md</code>
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400 mt-3">3. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-cyan-950 border border-cyan-500/30 text-cyan-300 text-[11px] font-mono mt-1">
+              ✓ 100% nguyên tắc được lưu vết và commit vào repository.
+            </span>
+          </div>
+        `
+      },
+      fn_harness: {
+        badge: "FOUNDATION • BẮT BUỘC 02",
+        title: "Dây Cương Cho Agent (AGENTS.md / CLAUDE.md)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li>Khóa quy chuẩn làm việc của AI: Lệnh chạy test, lệnh typecheck, lệnh build.</li>
+              <li>Quy định vị trí lưu trữ: Kế hoạch bắt buộc lưu vào <code>.agents/plans/plan-*.md</code>, nháp lưu vào <code>.agents/note.md</code>.</li>
+              <li><strong>Danh mục cấm sửa:</strong> Cấm Agent tự ý chạm vào file <code>.env</code>, container, và schema DB khi chưa có lệnh.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400 mt-3">2. Phân Công & Tệp Tin</h4>
+            <p class="text-xs text-slate-400 mt-1">
+              <strong>Tệp sinh ra:</strong> <code>/AGENTS.md</code> hoặc <code>/CLAUDE.md</code>.<br>
+              <strong>Nguyên tắc:</strong> Mô hình chỉ quyết định 10%, 90% thành bại nằm ở Harness.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400 mt-3">3. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-cyan-950 border border-cyan-500/30 text-cyan-300 text-[11px] font-mono mt-1">
+              ✓ Agent tự động đọc hiểu AGENTS.md khi bắt đầu mỗi phiên chat mới.
+            </span>
+          </div>
+        `
+      },
+      fn_glossary: {
+        badge: "FOUNDATION • BẮT BUỘC 03",
+        title: "Từ Điển Nghiệp Vụ Bất Biến (GLOSSARY.md)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li>Khóa cứng danh từ và động từ duy nhất trong dự án (ví dụ: bắt buộc dùng <code>Patient</code> thay vì dùng lẫn <code>User</code>, <code>Customer</code>, <code>Client</code>).</li>
+              <li>Chặn đứng hiện tượng AI đổi tên trường DB và tên biến tùy hứng giữa các file.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400 mt-3">2. Phân Công & Tệp Tin</h4>
+            <p class="text-xs text-slate-400 mt-1">
+              <strong>Công cụ:</strong> Matt Pocock <code>domain-modeling</code> skill.<br>
+              <strong>Tệp sinh ra:</strong> <code>/GLOSSARY.md</code> (thư mục gốc).
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400 mt-3">3. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-cyan-950 border border-cyan-500/30 text-cyan-300 text-[11px] font-mono mt-1">
+              ✓ 100% mã nguồn và test dùng chung danh từ trong GLOSSARY.md.
+            </span>
+          </div>
+        `
+      },
+      fn_system: {
+        badge: "FOUNDATION • BẮT BUỘC 04",
+        title: "C4 System Context & Design Tokens (tokens.css)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li>Vẽ sơ đồ C4 Level 1 & 2: Phân tách rõ ràng vùng Deterministic (Web, Core API, RDBMS) và vùng Probabilistic (Vector DB, LLMs Gateway).</li>
+              <li>Khóa toàn bộ màu sắc, typography, spacing vào biến CSS <code>tokens.css</code>.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400 mt-3">2. Phân Công & Tệp Tin</h4>
+            <p class="text-xs text-slate-400 mt-1">
+              <strong>Tệp sinh ra:</strong> <code>docs/architecture/system-context.md</code>, <code>tokens.css</code>.<br>
+              <strong>Công cụ:</strong> Mermaid.js, <code>ui-ux-pro-max</code>, <code>design-system</code>.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-cyan-400 mt-3">3. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-cyan-950 border border-cyan-500/30 text-cyan-300 text-[11px] font-mono mt-1">
+              ✓ Ranh giới mạng/dịch vụ rõ ràng; pre-commit hook chặn commit lỗi.
+            </span>
+          </div>
+        `
+      },
+
+      // INNER SPRINT LOOP
+      loop_specify: {
+        badge: "SPRINT LOOP • BƯỚC 1",
+        title: "Làm Rõ Đề Bài & Khóa Đặc Tả (Elicit & Specify)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li><strong>Khóa Non-Goals:</strong> Bắt buộc liệt kê những gì tính năng này KHÔNG làm (chiếc phanh chặn AI làm thừa).</li>
+              <li><strong>AI Phỏng vấn ngược:</strong> AI chất vấn về edge cases, phân quyền Actor, xử lý timeout.</li>
+              <li><strong>Khóa kiểu dữ liệu tĩnh:</strong> Định nghĩa toàn bộ Interfaces và Zod schemas trong <code>contracts.ts</code>.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">2. Tệp Bàn Giao</h4>
+            <p class="text-xs text-slate-400 mt-1">
+              <code>specs/[feature]/spec.md</code> (Scenarios Given-When-Then),<br>
+              <code>specs/[feature]/contracts.ts</code> (Kiểu dữ liệu tĩnh).
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">3. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-300 text-[11px] font-mono mt-1">
+              ✓ spec.md và contracts.ts đã được người dùng phê duyệt trước khi code.
+            </span>
+          </div>
+        `
+      },
+      loop_plan: {
+        badge: "SPRINT LOOP • BƯỚC 2",
+        title: "Phân Rã Lát Cắt Dọc & ADR Grilling (Plan & ADR)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li>Chia nhỏ tính năng thành danh sách lát cắt dọc (Vertical Slices) trong <code>tasks.md</code>. Mỗi task đi từ UI $\rightarrow$ API $\rightarrow$ DB.</li>
+              <li>Viết <code>docs/adr/ADR-xxx.md</code> ghi nhận Bối cảnh, Giải pháp và Đánh đổi (Trade-offs).</li>
+              <li>Chạy skill <code>grilling</code>: AI chất vấn bóc trần điểm mù kỹ thuật (timeout, race condition, rate-limit).</li>
+              <li>Dùng Postman MCP tạo Mock Server API để Frontend chạy giả lập ngay lập tức.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">2. Tệp Bàn Giao</h4>
+            <p class="text-xs text-slate-400 mt-1">
+              <code>specs/[feature]/plan.md</code>, <code>specs/[feature]/tasks.md</code>, <code>docs/adr/ADR-xxx.md</code>, Postman Mock Server.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">3. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-300 text-[11px] font-mono mt-1">
+              ✓ Kế hoạch đã vượt qua bài test grilling; Mock API đã chạy được.
+            </span>
+          </div>
+        `
+      },
+      loop_prototype: {
+        badge: "SPRINT LOOP • BƯỚC 3",
+        title: "Thử Nghiệm Định Lượng AI (AI Prototyping & Evals)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li>Tuyệt đối KHÔNG đưa LLM vào code chính nếu chưa chạy prototype độc lập.</li>
+              <li>Đo lường độ trễ chữ đầu tiên (TTFT), chi phí token $, và tỷ lệ trả về đúng JSON schema.</li>
+              <li>Tạo bộ dữ liệu vàng <code>specs/[feature]/evals.json</code> gồm 10–20 test cases mẫu có tiêu chí chấm khách quan.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">2. Công Cụ</h4>
+            <p class="text-xs text-slate-400 mt-1">
+              Matt Pocock <code>prototype</code>, pstack <code>arena runners</code>, Ragas, Promptfoo, DeepEval.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">3. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-300 text-[11px] font-mono mt-1">
+              ✓ Chi phí và độ trễ LLM nằm trong định mức; evals.json đã sẵn sàng.
+            </span>
+          </div>
+        `
+      },
+      loop_build: {
+        badge: "SPRINT LOOP • BƯỚC 4",
+        title: "Hiện Thực Hóa Lát Cắt Dọc (TDD Build Loop)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li><strong>Adapter Pattern:</strong> Bắt buộc giấu các cuộc gọi AI sau Interface trừu tượng (ví dụ: <code>ILlmService</code>).</li>
+              <li><strong>Mock Provider:</strong> Trong Unit Test, bắt buộc dùng Mock để test chạy trong vài mili-giây với kết quả tất định.</li>
+              <li><strong>Vòng lặp TDD (Red ➔ Green):</strong> Viết test fail tại Public Seam $\rightarrow$ AI sinh code tối thiểu để pass test.</li>
+              <li><strong>CẤM REFACTOR:</strong> Tuyệt đối không refactor trong pha này để giữ tập trung.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">2. Công Cụ & Tệp</h4>
+            <p class="text-xs text-slate-400 mt-1">
+              Matt Pocock <code>tdd</code>, pstack <code>feature</code> (cursor-grok-4.6-high-fast), <code>tests/*.spec.ts</code>, <code>src/core/</code>.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">3. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-300 text-[11px] font-mono mt-1">
+              ✓ 100% test case tại các Seams công khai đều đạt GREEN.
+            </span>
+          </div>
+        `
+      },
+      loop_review: {
+        badge: "SPRINT LOOP • BƯỚC 5",
+        title: "Thẩm Định Độc Lập Hai Trục (Two-Axis Code Review)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li>Khởi chạy 2 Sub-Agents độc lập không chung context:
+                <br>• <strong>Trục 1 (Standards):</strong> Quét sạch Fowler Code Smells (Mysterious Name, Feature Envy, Primitive Obsession, Duplicated Code).
+                <br>• <strong>Trục 2 (Spec Match):</strong> Đối chiếu từng dòng diff với <code>spec.md</code> để xóa code thừa hoặc bù kịch bản lỗi còn thiếu.
+              </li>
+              <li>Quét bảo mật OWASP Top 10 for LLMs: Chống Prompt Injection, lọc đầu ra Insecure Output, chặn rò rỉ API key.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">2. Công Cụ</h4>
+            <p class="text-xs text-slate-400 mt-1">
+              Matt Pocock <code>code-review</code>, GitNexus (Impact Analysis), model <code>claude-opus-5-thinking-high</code>.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">3. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-300 text-[11px] font-mono mt-1">
+              ✓ Mã nguồn đạt chuẩn Spec và không còn Fowler Smells nghiêm trọng.
+            </span>
+          </div>
+        `
+      },
+      loop_converge: {
+        badge: "SPRINT LOOP • BƯỚC 6",
+        title: "Kiểm Thử Hội Tụ & Xoay Vòng Sprint (Converge & Loop)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1.5 mt-1.5 leading-relaxed">
+              <li>Dùng <code>speckit-converge</code> kiểm tra đối soát giữa mã nguồn và <code>tasks.md</code>.</li>
+              <li>Nếu còn task trong sprint: Lặp lại từ Bước 1 cho User Story tiếp theo.</li>
+              <li>Nếu toàn bộ sprint đã hoàn thành: Chốt sprint, tạo Pull Request để chuyển sang Phân tầng 3 (Phát hành).</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-emerald-400 mt-3">2. Cổng Kiểm Soát (Exit Gate)</h4>
+            <span class="inline-block px-2.5 py-1 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-300 text-[11px] font-mono mt-1">
+              ✓ 100% tasks trong sprint backlog đã chuyển sang trạng thái Completed.
+            </span>
+          </div>
+        `
+      },
+
+      // OUTER RELEASE & FEEDBACK
+      rel_ephemeral: {
+        badge: "OUTER LOOP • BẮT BUỘC",
+        title: "Database Branching Tạm Thời Cho Mỗi PR (Neon)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-purple-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              Mỗi khi tạo Pull Request, GitHub Actions tự động dùng Neon Postgres Branching nhân bản một nhánh database riêng biệt từ production data (đã ẩn danh) trong 1 giây.
+            </p>
+            <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+              Toàn bộ test E2E (Playwright) và Integration test chạy trên dữ liệu thật này. Khi đóng PR, nhánh DB tự động bị hủy, đảm bảo không bao giờ làm hỏng database chính.
+            </p>
+          </div>
+          <div class="mt-3">
+            <span class="inline-block px-2.5 py-1 rounded bg-purple-950 border border-purple-500/30 text-purple-300 text-[11px] font-mono">
+              ✓ Nhánh DB tạm thời được tạo và tự xóa theo vòng đời PR.
+            </span>
+          </div>
+        `
+      },
+      rel_contract_ci: {
+        badge: "OUTER LOOP • BẮT BUỘC",
+        title: "Tự Động Hóa Kiểm Thử Hợp Đồng API (Postman CLI)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-purple-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              Pipeline CI tự động chạy toàn bộ Postman Collection để đảm bảo không có endpoint nào bị phá vỡ hợp đồng (Breaking Changes) trước khi merge vào nhánh chính.
+            </p>
+          </div>
+          <div class="mt-3">
+            <span class="inline-block px-2.5 py-1 rounded bg-purple-950 border border-purple-500/30 text-purple-300 text-[11px] font-mono">
+              ✓ 100% API contract tests đều pass trên CI runner.
+            </span>
+          </div>
+        `
+      },
+      rel_llmops: {
+        badge: "OUTER LOOP • BẮT BUỘC",
+        title: "LLMOps Tracing & Chi Phí Token Thời Gian Thực (Langfuse)",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-purple-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              Giám sát đồng thời 2 tầng: Tầng Web APM (Sentry bắt lỗi crash client/server, PostHog theo dõi hành vi) và Tầng LLMOps Tracing (Langfuse đo lường chi phí token $, độ trễ từng bước RAG, và câu trả lời bị người dùng gắn cờ sai).
+            </p>
+          </div>
+          <div class="mt-3">
+            <span class="inline-block px-2.5 py-1 rounded bg-purple-950 border border-purple-500/30 text-purple-300 text-[11px] font-mono">
+              ✓ Telemetry Langfuse và Sentry hoạt động ổn định trên production.
+            </span>
+          </div>
+        `
+      },
+      rel_feedback: {
+        badge: "OUTER LOOP • BẮT BUỘC",
+        title: "Vòng Lặp Phản Hồi Tự Động Vào Bộ Evals",
+        content: `
+          <div>
+            <h4 class="font-bold text-white text-xs uppercase tracking-wide text-purple-400">1. Việc Bắt Buộc Phải Làm</h4>
+            <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              Trên Web App, bắt buộc có nút đánh giá (Like/Dislike) hoặc form Báo cáo câu trả lời sai.
+            </p>
+            <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+              Khi người dùng bấm Dislike, hệ thống tự động trích xuất cặp (Prompt - Câu trả lời lỗi) và đẩy ngược về tệp <code>evals.json</code> làm test case vàng cho Sprint tiếp theo.
+            </p>
+          </div>
+          <div class="mt-3">
+            <span class="inline-block px-2.5 py-1 rounded bg-purple-950 border border-purple-500/30 text-purple-300 text-[11px] font-mono">
+              ✓ Dữ liệu phản hồi thực tế được chuyển hóa thành Evals Regression test.
+            </span>
+          </div>
+        `
+      }
+    };
+
+    function openDrawer(key) {
+      const data = drawerDetails[key];
+      if (!data) return;
+      document.getElementById('drawer-badge').innerText = data.badge;
+      document.getElementById('drawer-title').innerText = data.title;
+      document.getElementById('drawer-content').innerHTML = data.content;
+      document.getElementById('drawer').classList.remove('hidden');
+    }
+
+    function closeDrawer() {
+      document.getElementById('drawer').classList.add('hidden');
+    }
+
+    function generatePrompt() {
+      const feat = document.getElementById('input-feat').value || 'Tính năng mới';
+      const ai = document.getElementById('input-ai').value || 'AI Engine';
+      const nongoals = document.getElementById('input-nongoals').value || 'Không làm UI mở rộng';
+
+      const prompt = `Tôi muốn phát triển tính năng: "${feat}" theo đúng mô hình Dual-Loop AI-Native SDLC (Vòng Lặp Sprint Liên Tục Có Kiểm Soát).
+
+Kiến trúc & Công nghệ: ${ai}
+Phạm vi Non-Goals: ${nongoals}
+
+Hãy đóng vai trò Nhạc trưởng (Conductor) cùng tôi thực hiện vòng lặp Sprint này:
+1. Bước 1 (Specify): Phỏng vấn ngược lại tôi để làm rõ các Actor, User Cases, ranh giới Non-goals. Sinh sơ đồ Swimlane Mermaid, tạo specs/[feature]/spec.md và khóa kiểu dữ liệu tĩnh specs/[feature]/contracts.ts.
+2. Bước 2 (Plan & ADR): Bóc tách các lát cắt dọc vào tasks.md. Viết docs/adr/ADR-xxx.md nếu có quyết định mới. Dùng skill 'grilling' chất vấn kiến trúc và tạo Postman Mock Server.
+3. Bước 3 (Prototype & Evals): Dùng skill 'prototype' đo latency, token cost và chuẩn bị evals.json gồm 10 test case mẫu.
+4. Bước 4 (TDD Build Loop): Giấu AI provider sau Adapter interface. Dùng skill 'tdd' chạy vòng lặp Red -> Green theo từng lát cắt dọc.
+5. Bước 5 (Two-Axis Review): Khởi chạy 2 sub-agent độc lập qua skill 'code-review' (Trục 1: Fowler Code Smells; Trục 2: Đối chiếu spec.md).
+6. Bước 6 (Converge): Kiểm tra hoàn tất tasks.md trước khi chuẩn bị tạo Pull Request.
+
+Trước khi viết bất kỳ code nào, hãy chạy /in-your-own-words tóm tắt lại và hỏi tôi các câu hỏi cần làm rõ.`;
+
+      document.getElementById('output-prompt').value = prompt;
+    }
+
+    function copyGeneratedPrompt() {
+      const copyText = document.getElementById("output-prompt");
+      copyText.select();
+      navigator.clipboard.writeText(copyText.value);
+      const btn = document.getElementById("copy-btn");
+      btn.innerText = "Đã sao chép! ✓";
+      setTimeout(() => { btn.innerText = "Sao chép vào Clipboard"; }, 2000);
+    }
+
+    // Init
+    generatePrompt();
+  </script>
+</body>
+</html>
